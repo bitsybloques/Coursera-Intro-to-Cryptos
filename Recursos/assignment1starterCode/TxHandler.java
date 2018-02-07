@@ -32,18 +32,22 @@ public class TxHandler {
             Transaction.Input in = tx.getInput(i);
             UTXO utxo = new UTXO(in.prevTxHash, in.outputIndex);
             Transaction.Output output = utxoPool.getTxOutput(utxo);
-            if (!utxoPool.contains(utxo)) return false;
-            if (!Crypto.verifySignature(output.address, tx.getRawDataToSign(i), in.signature))
-                return false;
-            if (uniqueUtxos.contains(utxo)) return false;
+
+            if (!utxoPool.contains(utxo)) return false; //comprobamos si los outputs estan en la UTXO pool. En caso negativo, devolvemos falso
+
+            if (!Crypto.verifySignature(output.address, tx.getRawDataToSign(i), in.signature)) return false; //comprobamos si las firmas de cada input son válidas. En caso negativo, devolvemos falso
+                
+            if (uniqueUtxos.contains(utxo)) return false; //comprobamos que UTXO no sea llamado más de una vez.
             uniqueUtxos.addUTXO(utxo, output);
             previousTxOutSum += output.value;
         }
+
         for (Transaction.Output out : tx.getOutputs()) {
-            if (out.value < 0) return false;
+            if (out.value < 0) return false; //comprobamos que todos los valores output son positivos. En caso negativo, devolvemos falso.
+
             currentTxOutSum += out.value;
         }
-        return previousTxOutSum >= currentTxOutSum;
+        return previousTxOutSum >= currentTxOutSum; //comprobamos que la suma de los inputs sea mayor o igual que la suma de los outputs
     }
 
     /**
@@ -71,6 +75,6 @@ public class TxHandler {
         }
 
         Transaction[] validTxArray = new Transaction[validTxs.size()];
-        return validTxs.toArray(validTxArray);
+        return validTxs.toArray(validTxArray); //devolvemos un vector con las transacciones válidas (aceptadas)
     }
 }
