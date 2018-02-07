@@ -5,4 +5,4 @@ En éste repositorio se pueden encontrar los ejercicios propuestos en el curso d
 
 No hay un único modo de llegar a la solución, así que el código no debe tomarse como respuestas universales.
 
-Por cualquier duda o aclaración contacta conmigo en: http://bitsybloques.com/contacto/
+Para cualquier duda o aclaración contacta conmigo en: http://bitsybloques.com/contacto/
